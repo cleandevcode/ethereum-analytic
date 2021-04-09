@@ -10,9 +10,6 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
   "browserslist": {
     "production": [
       ">0.2%",
@@ -52,8 +49,5 @@
     "react-scripts": "^4.0.0",
     "uuid": "^8.3.0",
     "yup": "^0.29.3"
-  },
-  "devDependencies": {
-    "eslint-config-airbnb": "^18.2.1"
   }
 }
