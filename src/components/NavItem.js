@@ -6,18 +6,17 @@ import {
 import PropTypes from 'prop-types';
 import { Button, ListItem } from '@material-ui/core';
 
-const NavItem = ({
-  href,
-  icon: Icon,
-  title,
-  ...rest
-}) => {
+const NavItem = ({ href, icon: Icon, title, hiddenIcon, ...rest }) => {
   const location = useLocation();
-
-  const active = href ? !!matchPath({
-    path: href,
-    end: false
-  }, location.pathname) : false;
+  const active = href
+    ? !!matchPath(
+        {
+          path: href,
+          end: false
+        },
+        location.pathname
+      )
+    : false;
 
   return (
     <ListItem
@@ -31,7 +30,7 @@ const NavItem = ({
       <Button
         component={RouterLink}
         sx={{
-          color: 'text.secondary',
+          color: hiddenIcon ? 'gray' : 'text.secondary',
           fontWeight: 'medium',
           justifyContent: 'flex-start',
           letterSpacing: 0,
@@ -39,7 +38,7 @@ const NavItem = ({
           textTransform: 'none',
           width: '100%',
           ...(active && {
-            color: 'primary.main'
+            color: hiddenIcon ? 'white' : 'primary.main'
           }),
           '& svg': {
             mr: 1
@@ -47,12 +46,8 @@ const NavItem = ({
         }}
         to={href}
       >
-        {Icon && (
-          <Icon size="20" />
-        )}
-        <span>
-          {title}
-        </span>
+        {!hiddenIcon && Icon && <Icon />}
+        <span style={{ paddingLeft: 10 }}>{title}</span>
       </Button>
     </ListItem>
   );

@@ -1,19 +1,16 @@
-import { useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
-import PropTypes from 'prop-types';
+import { useState, useEffect } from 'react';
+import { Link as RouterLink, useNavigate, useLocation } from 'react-router-dom';
 import {
   AppBar,
-  Badge,
   Box,
   Hidden,
   IconButton,
   Toolbar,
-  Avatar,
-  Typography
+  Avatar
 } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
-import NotificationsIcon from '@material-ui/icons/NotificationsOutlined';
 import InputIcon from '@material-ui/icons/Input';
+import { isMobile } from 'react-device-detect';
 import Logo from './Logo';
 
 import DashboardSidebar from './DashboardSidebar';
@@ -24,69 +21,76 @@ const user = {
   name: 'Katarina Smith'
 };
 
-const DashboardNavbar = ({ onMobileNavOpen, ...rest }) => {
-  const [notifications] = useState([]);
+const DashboardNavbar = ({ ...rest }) => {
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const [mobileView, setMobileView] = useState(false);
+  const [path, checkPath] = useState(false);
+
+  useEffect(() => {
+    const result = location.pathname.match(/app/g) ? true : false;
+    checkPath(result);
+  }, [location.pathname]);
 
   return (
     <AppBar elevation={0} {...rest}>
-      <Toolbar>
-        <RouterLink to="/">
-          <Logo />
-        </RouterLink>
-        <Box sx={{ flexGrow: 1 }} />
-        <DashboardSidebar />
-        <Box sx={{ flexGrow: 1 }} />
-        <Box
-          sx={{
-            alignItems: 'center',
-            display: 'flex',
-            flexDirection: 'column',
-            p: 2
-          }}
-        >
-          <Avatar
-            component={RouterLink}
-            src={user.avatar}
-            sx={{
-              cursor: 'pointer',
-              width: 64,
-              height: 64
-            }}
-            to="/app/account"
+      <Toolbar
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          background: path ? 'primary' : '#F4F6F8'
+        }}
+      >
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <RouterLink to="/">
+            <Logo />
+          </RouterLink>
+          <DashboardSidebar
+            onMobileClose={() => setMobileView(false)}
+            openMobile={mobileView}
           />
-          <Typography color="textPrimary" variant="h5">
-            {user.name}
-          </Typography>
-          <Typography color="textSecondary" variant="body2">
-            {user.jobTitle}
-          </Typography>
         </Box>
-        <Hidden lgDown>
-          <IconButton color="inherit">
-            <Badge
-              badgeContent={notifications.length}
-              color="primary"
-              variant="dot"
-            >
-              <NotificationsIcon />
-            </Badge>
-          </IconButton>
-          <IconButton color="inherit">
-            <InputIcon />
-          </IconButton>
-        </Hidden>
-        <Hidden lgUp>
-          <IconButton color="inherit" onClick={onMobileNavOpen}>
-            <MenuIcon />
-          </IconButton>
-        </Hidden>
+        {path && (
+          <Box
+            sx={{
+              alignItems: 'center',
+              display: 'flex',
+              p: 0
+            }}
+          >
+            {!isMobile && (
+              <Avatar
+                component={RouterLink}
+                src={user.avatar}
+                sx={{
+                  cursor: 'pointer',
+                  width: 35,
+                  height: 35,
+                  mx: 2
+                }}
+                to="/app/account"
+              />
+            )}
+            <Hidden lgDown>
+              <IconButton color="inherit" onClick={() => navigate('/login')}>
+                <InputIcon />
+              </IconButton>
+            </Hidden>
+            <Hidden lgUp>
+              <IconButton
+                sx={{ p: 0 }}
+                color="inherit"
+                onClick={() => setMobileView(true)}
+              >
+                <MenuIcon />
+              </IconButton>
+            </Hidden>
+          </Box>
+        )}
       </Toolbar>
     </AppBar>
   );
-};
-
-DashboardNavbar.propTypes = {
-  onMobileNavOpen: PropTypes.func
 };
 
 export default DashboardNavbar;
