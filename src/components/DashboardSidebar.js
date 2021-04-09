@@ -26,14 +26,14 @@ const items = [
     title: 'Dashboard'
   },
   {
-    href: '/app/customers',
+    href: '/app/queries',
     icon: UsersIcon,
-    title: 'Customers'
+    title: 'Queries'
   },
   {
-    href: '/app/products',
+    href: '/app/projects',
     icon: ShoppingBagIcon,
-    title: 'Products'
+    title: 'Projects'
   },
   {
     href: '/app/account',

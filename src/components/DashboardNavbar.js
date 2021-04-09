@@ -56,7 +56,7 @@ const DashboardNavbar = ({ ...rest }) => {
             sx={{
               alignItems: 'center',
               display: 'flex',
-              p: 0
+              p: isMobile ? 0 : 1
             }}
           >
             {!isMobile && (
